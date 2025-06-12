@@ -17,7 +17,7 @@
     .selected { background-color: #fff; border-radius: 50%; width: 30px; height: 30px; line-height: 30px; margin: auto; position: relative; z-index: 2; }
     .selected .date-content { color: #000; }
     .event-description { margin-top: 20px; font-size: 1.1em; background-color: #111; padding: 10px; border-radius: 10px; text-align: center; cursor: pointer; user-select: none; oncopy="return false;" }
-    .tab-bar { display: flex; justify-content: space-around; background-color: #111; padding: 10px 0; border-top: 1px solid #333; }
+    .tab-bar { display: flex !important; justify-content: space-around; background-color: #111; padding: 10px 0; border-top: 1px solid #333; position: fixed; bottom: 0; width: 100%; }
     .tab-button { text-align: center; flex: 1; font-size: 12px; color: #777; }
     .tab-button.active { color: #fff; }
     .tab-button span { display: block; font-size: 20px; color: #777; transition: color 0.3s; }
@@ -256,22 +256,19 @@
     let backButtonPressCount = 0;
     let backButtonTimeout = null;
 
-    function showSplashScreen() {
-      const splash = document.getElementById('splash-screen');
-      splash.style.display = 'flex';
-      setTimeout(() => {
-        splash.classList.add('fade-out');
-        setTimeout(() => {
-          splash.style.display = 'none';
-          initializeApp();
-        }, 500);
-      }, 2000);
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabBar = document.querySelector('.tab-bar');
+      if (tabBar) {
+        tabBar.style.display = 'flex'; // Гарантуємо відображення вкладок
+      } else {
+        console.error('Елемент .tab-bar не знайдено!');
+      }
+      initializeApp();
+    });
 
     function initializeApp() {
       renderCalendar(currentMonth, currentYear, 'monthDisplay', 'calendarBody', true);
       renderCalendar(currentMonth, currentYear, 'myMonthDisplay', 'myCalendarBody');
-      document.querySelector('.tab-bar').style.display = 'flex'; // Явне відображення вкладок
       addSwipe('homeTab');
       addSwipe('myCalendarTab');
       setupEventDescriptionHold();
